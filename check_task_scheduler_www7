@@ -1,0 +1,3 @@
+#! /bin/sh
+/usr/local/nagios/libexec/check_wmi_plus.pl -H 172.16.200.81 -u nagios -p M1ndJ3t1  -m checkservice -a Schedule
+

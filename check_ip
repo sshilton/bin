@@ -1,0 +1,3 @@
+#! /bin/sh
+NAGIOSHOME=/usr/local/nagios
+grep -A  4  $1 "$NAGIOSHOME"/etc/hosts/*

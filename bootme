@@ -1,0 +1,26 @@
+#! /bin/sh
+# reboot how we like
+#set -x
+if [ -r /etc/default/grub.linux ] && [ -r /etc/default/grub.win7 ];
+then
+
+case $1 in
+	linux)
+	cp /etc/default/grub.linux /etc/default/grub
+	/usr/sbin/update-grub
+	/sbin/reboot
+	;;
+	win7)
+	cp /etc/default/grub.win7 /etc/default/grub
+	/usr/sbin/update-grub
+	/sbin/reboot
+	;;
+	*)
+	echo "Usage: $0 <linux win7>"
+	exit 1
+	;;
+esac
+else
+	echo "One of your grub. files is missing, please check /etc/default"
+	exit 1
+fi

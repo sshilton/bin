@@ -1,0 +1,19 @@
+#! /bin/sh
+# sshilton@gmail.com
+# 9/4/2012
+set -x #for debug (uncomment)
+
+
+# declare variables
+#my_title=$1
+my_file=$1
+my_outfile=$2
+my_outfile=`echo "$my_file" | sed 's/.flv/.mp3/g'`
+if [ "$1" = "" ]; then
+	echo "Usage: flv2mp3 <flv to convert> <mp3 output file>"
+	exit 1
+fi
+
+
+
+ffmpeg -i "$my_file" -acodec mp3 -ac 2 -ab 128 -vn -y "$my_outfile"

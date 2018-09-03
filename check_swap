@@ -1,0 +1,13 @@
+#! /bin/sh
+return=`free | grep Swap | awk '{print $2 " " $3 " " $4}'`
+freeswap=`echo $return | awk '{print $3}'`
+echo $freeswap
+freetest=$1
+if [ $freeswap -gt $freetest ];then
+	echo "OK: $freeswap is above threshold of $freetest"
+	exit 0
+  else
+	echo "Critical: $freeswap is smaller then the threshhold of $freetest"
+	exit 2
+fi
+

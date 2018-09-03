@@ -1,0 +1,21 @@
+#! /bin/sh
+# reboot how we like
+set -x
+
+
+case $1 in
+	linux)
+	cp /etc/default/grub.linux /etc/default/grub
+	/usr/sbin/update-grub
+	/sbin/reboot
+	;;
+	win7)
+	cp /etc/default/grub.win7 /etc/default/grub
+	/usr/sbin/update-grub
+	/sbin/reboot
+	;;
+	*)
+	echo "Usage: $0 <linux win7>"
+	exit 1
+	;;
+esac

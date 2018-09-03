@@ -1,0 +1,2 @@
+#! /bin/sh
+iwlist wlan0 scanning | grep -A 2 -B 2 Encry
