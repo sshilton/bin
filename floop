@@ -1,2 +1,2 @@
 #! /bin/sh
-dh -h -T /dev/sd*
+df -h -T /dev/sd*
