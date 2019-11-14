@@ -19,7 +19,7 @@
 # See url for more info - http://www.cyberciti.biz/faq/?p=3402
 # Author: nixCraft <www.cyberciti.biz> under GPL v.2.0+
 # -------------------------------------------------------------------------------
-ISO="af cn ru fn" 
+ISO="af cn ru" 
  
 ### Set PATH ###
 IPT=/sbin/iptables
@@ -60,7 +60,7 @@ do
 	tDB=$ZONEROOT/$c.zone
  
 	# get fresh zone file
-	$WGET -O $tDB $DLROOT/$c.zone
+#	$WGET -O $tDB $DLROOT/$c.zone
  
 	# country specific log message
 	SPAMDROPMSG="$c Country Drop"
