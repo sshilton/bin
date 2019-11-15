@@ -28,7 +28,7 @@ EGREP=/bin/egrep
  
 ### No editing below ###
 SPAMLIST="countrydrop"
-ZONEROOT="/root/iptables"
+ZONEROOT="/home/sshilton/iptables"
 DLROOT="http://www.ipdeny.com/ipblocks/data/countries"
  
 case "$1" in
@@ -57,7 +57,7 @@ $IPT -N $SPAMLIST
 for c  in $ISO
 do 
 	# local zone file
-	tDB=$ZONEROOT/$c.zone
+	tDB=$ZONEROOT/ip2location_country_$c.netset
  
 	# get fresh zone file
 #	$WGET -O $tDB $DLROOT/$c.zone
