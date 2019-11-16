@@ -58,7 +58,7 @@ for c  in $ISO
 do 
 	# local zone file
 	tDB=$ZONEROOT/ip2location_country_$c.netset
- 
+	echo "$c"  
 	# get fresh zone file
 #	$WGET -O $tDB $DLROOT/$c.zone
  
@@ -69,6 +69,7 @@ do
 	BADIPS=$(egrep -v "^#|^$" $tDB)
 	for ipblock in $BADIPS
 	do
+	echo "$ipblock"	-- "$c"
 	   $IPT -A $SPAMLIST -s $ipblock -j LOG --log-prefix "$SPAMDROPMSG"
 	   $IPT -A $SPAMLIST -s $ipblock -j DROP
 	done
