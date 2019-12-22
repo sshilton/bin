@@ -1,6 +1,6 @@
 #! /bin/sh
  if [ -x /usr/sbin/icinga ] && [ -r /etc/icinga/icinga.cfg ]; then
-	/usr/sbin/icinga -v /etc/icinga/icinga.cfg
+	sudo 	/usr/sbin/icinga -v /etc/icinga/icinga.cfg
 	else
 	echo "You do not have execute permisions on nagios or readable access to the nagios.cfg, you need to be in group nagios, you are `id`"
 fi
