@@ -1,6 +1,6 @@
 #! /bin/sh
 #set -x
-email=sean.shilton@hackensackmeridian.org,sshilton@outlook.com
+email=sean.shilton@hackensackmeridian.org,sshilton@outlook.com,christopherc.diaz@hackensackmeridian.org
 #email=sshilton@outlook.com
 alerts="/tmp/alerts.html"
 avail="/tmp/avail.html"
