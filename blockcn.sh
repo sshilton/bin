@@ -28,7 +28,7 @@ EGREP=/bin/egrep
  
 ### No editing below ###
 SPAMLIST="countrydrop"
-ZONEROOT="/home/sshilton/iptables"
+ZONEROOT="/home/sshilton/blocklist-ipsets/ip2location_country"
 DLROOT="http://www.ipdeny.com/ipblocks/data/countries"
  
 case "$1" in
@@ -60,8 +60,8 @@ do
 	tDB=$ZONEROOT/ip2location_country_$c.netset
 	echo "$c"  
 	# get fresh zone file
-#	$WGET -O $tDB $DLROOT/$c.zone
- 
+cd $ZONEROOT
+git pull
 	# country specific log message
 	SPAMDROPMSG="$c Country Drop"
  
