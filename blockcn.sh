@@ -87,7 +87,7 @@ stop)
 echo "Doing nothing, shutting down"
 	;;
 status)
-sudo 	iptables -L
+sudo 	iptables -L -n
 	;;
 *)
 	echo "Usage: $0 (start|stop|status)"
