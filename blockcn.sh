@@ -28,9 +28,14 @@ EGREP=/bin/egrep
  
 ### No editing below ###
 SPAMLIST="countrydrop"
+UPDATEROOT="/home/sshilton/blocklist-ipsets/"
 ZONEROOT="/home/sshilton/blocklist-ipsets/ip2location_country"
 DLROOT="http://www.ipdeny.com/ipblocks/data/countries"
- 
+# updating the country zones
+
+cd  $UPDATEROOT
+git pull
+
 case "$1" in
 	start)
 cleanOldRules(){
@@ -70,8 +75,8 @@ git pull
 	for ipblock in $BADIPS
 	do
 	echo "$ipblock"	-- "$c"
-	   $IPT -A $SPAMLIST -s $ipblock -j LOG --log-prefix "$SPAMDROPMSG"
-	   $IPT -A $SPAMLIST -s $ipblock -j DROP
+	   $IPT -w -A $SPAMLIST -s $ipblock -j LOG --log-prefix "$SPAMDROPMSG"
+	   $IPT -w -A $SPAMLIST -s $ipblock -j DROP
 	done
 done
  
@@ -87,7 +92,7 @@ stop)
 echo "Doing nothing, shutting down"
 	;;
 status)
-sudo 	iptables -L -n | grep -v DROP
+sudo 	iptables -w -L -n | grep -v DROP
 	;;
 *)
 	echo "Usage: $0 (start|stop|status)"
