@@ -1,4 +1,5 @@
 #!/bin/bash
+#set -x
 ### BEGIN INIT INFO
 # Provides:          blockcn
 # Required-Start:    $local_fs $remote_fs
