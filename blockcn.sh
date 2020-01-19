@@ -20,7 +20,7 @@
 # See url for more info - http://www.cyberciti.biz/faq/?p=3402
 # Author: nixCraft <www.cyberciti.biz> under GPL v.2.0+
 # -------------------------------------------------------------------------------
-ISO="af cn ru" 
+ISO="af cn ru fr tw" 
  
 ### Set PATH ###
 IPT=/sbin/iptables
