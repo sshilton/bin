@@ -1,2 +1,1 @@
-#! /bin/sh
 transmission-daemon -m -t --password 07740 --username longbranch -a  `last | head -1 | awk '{print $3}'`
