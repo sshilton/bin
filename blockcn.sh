@@ -33,6 +33,10 @@ UPDATEROOT="/home/sshilton/blocklist-ipsets/"
 ZONEROOT="/home/sshilton/blocklist-ipsets/ip2location_country"
 DLROOT="http://www.ipdeny.com/ipblocks/data/countries"
 # updating the country zones
+if [ ! -d $UPDATEROOT ]; then
+	cd ~
+	git clone https://github.com/firehol/blocklist-ipsets.git
+fi
 
 cd  $UPDATEROOT  # this gets the latest contry zones
 git pull
