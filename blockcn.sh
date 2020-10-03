@@ -23,7 +23,8 @@
 ISO="af cn ru fr tw" 
  
 ### Set PATH ###
-IPT=/sbin/iptables
+tables=`which iptables`
+IPT=$tables
 WGET=/usr/bin/wget
 EGREP=/bin/egrep
  
