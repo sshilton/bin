@@ -1,5 +1,5 @@
 #!/bin/bash
-#set -x
+set -x
 ### BEGIN INIT INFO
 # Provides:          blockcn
 # Required-Start:    $local_fs $remote_fs
@@ -57,7 +57,7 @@ $IPT -P FORWARD ACCEPT
 }
  
 # create a dir
-[ ! -d $ZONEROOT ] && /bin/mkdir -p $ZONEROOT
+#[ ! -d $ZONEROOT ] && /bin/mkdir -p $ZONEROOT
  
 # clean old rules
 cleanOldRules
@@ -81,15 +81,15 @@ git pull
 	for ipblock in $BADIPS
 	do
 	echo "$ipblock"	-- "$c"
-	   $IPT -w -A $SPAMLIST -s $ipblock -j LOG --log-prefix "$SPAMDROPMSG"
-	   $IPT -w -A $SPAMLIST -s $ipblock -j DROP
+	   sudo $IPT -w -A $SPAMLIST -s $ipblock -j LOG --log-prefix "$SPAMDROPMSG"
+	  sudo  $IPT -w -A $SPAMLIST -s $ipblock -j DROP
 	done
 done
  
 # Drop everything 
-$IPT -I INPUT -j $SPAMLIST
-$IPT -I OUTPUT -j $SPAMLIST
-$IPT -I FORWARD -j $SPAMLIST
+sudo $IPT -I INPUT -j $SPAMLIST
+sudo $IPT -I OUTPUT -j $SPAMLIST
+sudo $IPT -I FORWARD -j $SPAMLIST
  
 # call your other iptable script
 # /path/to/other/iptables.sh
