@@ -1,5 +1,6 @@
 #! /bin/sh
 # added noip
+# exit's with nothing if no noIP
 /usr/local/bin/noip2 
 # Run this script to block china
 /home/sshilton/bin/blockcn.sh start
