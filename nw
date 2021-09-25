@@ -1,0 +1,13 @@
+#! /bin/bash
+#set -x
+BIN=/home/sshilton/bin/
+"$BIN"/chknag
+out=$?
+if [ $out -eq 0 ];
+	then
+	sudo service nagios restart 
+	echo "nagios service restarted"
+else
+	echo "nagios service config files are not syntacticly correct"
+	echo "run chknag"
+fi
