@@ -1,5 +1,6 @@
 #! /bin/bash
 #set -x
+# this is a laziest of scripts with wayyyyyy to many dependancies built in for a <20 liner, but it works for me
 BIN=/home/sshilton/bin/
 "$BIN"/chknag
 out=$?
