@@ -10,5 +10,5 @@ if [ $out -eq 0 ];
 	echo "nagios service restarted"
 else
 	echo "nagios service config files are not syntacticly correct"
-	echo "run chknag"
+	echo "run chknag or if not available, run nagios -v $NAGIOS_HOME$/etc/nagios.cfg"
 fi
