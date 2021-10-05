@@ -95,7 +95,8 @@ sudo $IPT -I FORWARD -j $SPAMLIST
 # /path/to/other/iptables.sh
 	;;
 stop)
-echo "Doing nothing, shutting down"
+echo "Flushing iptables and shutting down"
+	sudo iptables -F
 	;;
 status)
 sudo 	iptables -w -L -n | grep -v DROP
