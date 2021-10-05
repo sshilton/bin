@@ -3,5 +3,5 @@
 # exit's with nothing if no noIP
 #/usr/local/bin/noip2 --replaced with ddclient 
 # Run this script to block china
-/home/sshilton/bin/blockcn.sh start
+/home/sshilton/bin/blockcn.sh start 2&>1
 echo "`hostname` rebooted and FW is up" | mail -s "`hostname` rebooted" trebor.kiley@textnow.me
