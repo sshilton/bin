@@ -1,5 +1,5 @@
 #!/bin/bash
-set -x
+#set -x
 ### BEGIN INIT INFO
 # Provides:          blockcn
 # Required-Start:    $local_fs $remote_fs
@@ -20,7 +20,7 @@ set -x
 # See url for more info - http://www.cyberciti.biz/faq/?p=3402
 # Author: nixCraft <www.cyberciti.biz> under GPL v.2.0+
 # -------------------------------------------------------------------------------
-ISO="af cn ru fr tw" 
+ISO="af cn ru fr tw kr" 
  
 ### Set PATH ###
 tables=`which iptables`
@@ -95,7 +95,8 @@ sudo $IPT -I FORWARD -j $SPAMLIST
 # /path/to/other/iptables.sh
 	;;
 stop)
-echo "Doing nothing, shutting down"
+echo "Flushing iptables and shutting down"
+	sudo iptables -F
 	;;
 status)
 sudo 	iptables -w -L -n | grep -v DROP

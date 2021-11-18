@@ -3,9 +3,16 @@ set -x
 # Modified by sean.shilton@fepoc.com 
 # This script has been released under the same license as GNU bash 3
 # Please let me know if you have any suggestions
+# this assume nagios is installed in /usr/local/nagios
 hostdir=/usr/local/nagios/etc/hosts
+if [ -d $hostdir ]
+then
+	echo "blarg"
+# do nothing
+else
+	echo "nagios hosts cannot be found in $hostdir , check your paths"
+fi
 for i in  `ls hostdir`
-
 # check whether hostname has been specified
 #if [[ -z host ]]
 #then
