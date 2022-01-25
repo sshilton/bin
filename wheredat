@@ -1,0 +1,6 @@
+#! /bin/sh
+#set -x
+for i in `sudo iptables -S | grep sshd | awk '{print $4}'` 
+ do
+	whois $i  | grep country
+done
