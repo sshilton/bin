@@ -20,7 +20,7 @@
 # See url for more info - http://www.cyberciti.biz/faq/?p=3402
 # Author: nixCraft <www.cyberciti.biz> under GPL v.2.0+
 # -------------------------------------------------------------------------------
-ISO="af cn ru fr tw kr" 
+ISO="af cn ru fr tw kr in zz" 
  
 ### Set PATH ###
 tables=`which iptables`
