@@ -1,0 +1,300 @@
+#!/usr/bin/env bash
+# gets temperature, fan speed and voltages from lm_sensors
+# and smartctl for HDD temp
+# Copyright (C) 2006 Mikael Lammentausta
+
+
+PATH=/bin:/sbin:/usr/bin:/usr/sbin:/usr/local/bin:/usr/local/sbin:/usr/nagios/sbin:/usr/local/nagios/sbin
+
+PROGNAME=`basename $0`
+PROGPATH=`echo $0 | sed -e 's,[\\/][^\\/][^\\/]*$,,'`
+REVISION=`echo '$Revision: 2.0 $' | sed -e 's/[^0-9.]//g'`
+
+#. $PROGPATH/utils.sh
+
+print_usage() {
+	echo "Usage: $PROGNAME [options]"
+	echo "  e.g. $PROGNAME -T temperature -w 50 -c 60 -d /dev/hda,/dev/hdb"
+	echo
+	echo "Options:"
+	echo -e "\t --help | -h          print help"
+	echo -e "\t --version | -V       print version"
+	echo -e "\t --verbose | -v       be verbose"
+	echo -e "\t --type | -T [type]   "
+	echo -e "\t    temperature       check and print temperature data"
+	echo -e "\t    voltages          check and print voltage data"
+	echo -e "\t    fan               check and print fan data"
+	echo -e "\t -w [value]           set warning value"
+	echo -e "\t -c [value]           set critical value"
+	echo -e "\t -d [hdd drives]      set hard drives to scan, comma-separated"
+	echo -e "\t -dd [driver type]    set hard drive type for smartctl (default ata)"
+
+	echo
+	echo "If no options are given, $PROGRAME will print only status."
+	echo "NOTE: you can only ask one data type at once, $PROGNAME will"
+	echo "      not output temp, voltage and fan info at the same time."
+	echo "      Critical/warning level only watches the CPU temperature."
+	echo "      You cannot set levels for voltages."
+	echo
+}
+
+print_help() {
+	print_revision $PROGNAME $REVISION
+	echo 
+	echo "This plugin checks hardware status using the lm_sensors package."
+	echo 
+	print_usage
+	echo 
+	support
+	exit 3
+}
+
+# set defaults
+check_temp=0
+check_voltages=0
+check_fan=0
+check_smart=0
+isverbose=0
+hddtype="ata"
+
+
+
+# test dependencies
+if [ ! "$(type -p sensors)" ]; then
+	echo "SENSORS UNKNOWN - command not found (did you install lmsensors?)"
+	exit -1
+elif [ ! "$(type -p smartctl)" ] && [ ${check_smart} -eq 1 ]; then
+	echo "Smartctl binary not found - no data available from hard drives"
+	echo
+	check_smart=0
+else
+	# get the data
+	sensordata=$(sensors 2>&1)
+	status=$?
+
+	# test status
+	if test ${status} -ne 0 ; then
+		echo "WARNING - sensors returned state $status"
+		exit -1
+	elif [ $check_smart -eq 1 ] && [ ! "$hdd_drive" ]; then
+		echo "No HDD drive defined. Use the -d switch."
+		exit -1
+	fi
+fi
+
+
+# all is ok
+if [ $isverbose -eq 1 ]; then
+	echo -e "${sensordata}"
+fi
+
+
+# put the multiple items given at the prompt to an array
+form_hdd_array() {
+	IFS_bak="$IFS"	
+	IFS=","
+
+	local drive
+	hdd_drives[0]="reserved"
+
+	for drive in ${1}; do
+
+		hdd_drives[${#hdd_drives[@]}]="$drive"
+
+	done
+
+	IFS="$IFS_bak"
+}
+
+
+# check functions
+check_temp() {
+	cpu_temp="$(grep -i 'cpu temp' <<< "${sensordata}" | \
+				grep -Eo '[0-9\.]+[[:punct:]]?[ ]?[CF]+' | head -n 1)" 
+
+	mobo_temp="$(grep -i 'M/B temp' <<< "${sensordata}" | \
+				 grep -Eo '\+[0-9]*[[:punct:]]?[ ]?[CF]+' | head -n 1)"
+
+	local drive
+	hdd_temp[0]="reserved"
+
+
+	for drive in $(seq 1 1 ${#hdd_drives[@]}); do
+		[ -e "${hdd_drives[$drive]}" ] && \
+		hdd_temp[${#hdd_temp[@]}]="$(smartctl -A ${hdd_drives[$drive]} -d $hddtype | \
+		      grep -i temperature | \
+	          awk '{for (i=10; i<=NF; i++) printf("%s ",$i);printf ("\n")}') C"
+	done
+	}
+
+# check fan speed
+check_fan() {
+	fans="$(grep -i 'fan' <<< "${sensordata}" | cut -d'(' -f 1 )"
+	}
+
+# check voltages
+check_voltages() {
+
+	# parse all voltages nicely to stdout
+	sensors | grep -E '[0-9]{2}\ V' | cut -d'(' -f 1 | \
+		sed 's/\ *//g ; s/:/\ =\ /' | tr '\n' '; ' 
+
+	}
+
+
+main() {
+	# temperature
+	if [ $check_temp -eq 1 ]; then
+		check_temp
+		local cpu_status=0
+
+		# if either temp exceeds critical..
+		[ "$critical" ] && \
+			if [ $(grep -Eo '[0-9]+' <<< ${cpu_temp}) -ge $critical ]; then
+#			   [ $(grep -Eo '[0-9]+' <<< ${mobo_temp}) -ge $critical ]; then
+
+				echo -n "[CRITICAL]  "		
+				cpu_status=2
+			fi
+
+		# if either temp exceeds warning...
+		[ "$warning" ] && \
+			if [ $(grep -Eo '[0-9]+' <<< ${cpu_temp}) -ge $warning ]; then
+#			   [ $(grep -Eo '[0-9]+' <<< ${mobo_temp}) -ge $warning ]; then
+				echo -n "[WARNING]  "
+				cpu_status=1
+			fi
+
+
+		# output data
+		echo -n "CPU = ${cpu_temp}  MOTHERBOARD = ${mobo_temp}  "
+
+		for drive in $(seq 1 1 ${#hdd_drives[@]}); do
+			echo -n "${hdd_drives[$drive]} = ${hdd_temp[$drive]}  "
+		done
+
+		exit $cpu_status
+		
+
+	# fan
+	elif [ $check_fan -eq 1 ]; then
+		check_fan
+		local fan_status=0
+		local worst_state=0
+		IFS_bak="$IFS"
+		IFS=$'\n'
+
+		for fan in $fans; do
+			fan_status=0
+			fan_name="$(awk -F':' {'print $1'} <<< $fan )"
+			speed="$(awk /[0-9]+/{'print $2'} <<< $fan)"
+
+			# if a fan exceeds critical..
+			[ "$critical" ] && \
+				if [ $speed -le $critical ]; then
+					fan_status=2
+				fi
+
+			# if a fan exceeds warning..
+			[ "$warning" ] && \
+				if [ $speed -le $warning ]; then
+					fan_status=1
+				fi
+				
+			# normal status -eq 0
+			[ $fan_status -eq 2 ] && echo -n "[CRITICAL]: "
+			[ $fan_status -eq 1 ] && echo -n "[WARNING]: "
+			echo -n "${fan_name} = ${speed} RPM  "
+
+			# remember worst state
+			[ $fan_status -gt $worst_state ] && worst_state=$fan_status
+
+		done
+
+		echo
+		exit $worst_state
+
+
+	# voltages
+	elif [ $check_voltages -eq 1 ]; then
+		# no critical/warning for voltages!
+		echo "$(check_voltages)"
+		exit 0
+
+
+	# default operation
+	else
+		if echo ${sensordata} | egrep ALARM > /dev/null; then
+			echo SENSOR CRITICAL - Sensor alarm detected!
+			exit 2
+		else
+			echo sensor ok
+			exit 0
+		fi
+	fi
+}
+
+
+# parse cmd arguments
+if [ "$#" -gt 0 ]; then
+        while [ "$#" -gt 0 ]; do
+		case "$1" in
+			'--help'|'-h')
+				print_help
+				exit 3
+				;;
+			'--version'|'-V')
+				print_revision $PROGNAME $REVISION
+				exit 3
+				;;
+			'--verbose'|'-v')
+				isverbose=1
+				shift 1
+				;;
+			'-T'|'--type')
+				case $2 in
+					'temp'|'temperature')
+						check_temp=1
+						check_smart=1
+						;;
+					'voltages')
+						check_voltages=1
+						;;
+					'fan')
+						check_fan=1
+						;;
+					*)
+						echo "Unknown type!"
+						exit 3
+						;;
+				esac
+				shift 2
+				;;
+			'-c')
+				critical="$2"
+				shift 2
+				;;
+			'-w')
+				warning="$2"
+				shift 2
+				;;
+			'-d')
+				form_hdd_array "$2"
+				# drives are now in $hdd_drives[]
+				shift 2
+				;;
+			'-dd')
+				hddtype="$2"
+				;;
+			*)
+				echo "Unknown option!"
+				print_usage
+				exit 3
+				;;
+		esac
+	done
+fi
+
+
+# call the main function
+main
