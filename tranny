@@ -1,22 +1,27 @@
 #! /bin/sh
+#set -x
 case $1 in
 	start)
-	transmission-daemon -m -t --password 07740 --username longbranch -a  127.0.0.1,`last | head -1 | awk '{print $3}'`
+	transmission-daemon -m -t --password 07740 --username longbranch -a 127.0.0.1,`last | head -1 | awk '{print $3}'`,192.168.1.0/24
 	;;
 
 	status)
-	ps -ef | grep transmission-daemon | grep -v grep  
+	status=`ps -ef | grep transmission-daemon | grep -v grep`
+	if [ "$status" = "" ];then
+	echo "Transmission has been terminated"
+	else
+	echo "$status"
+	fi
 	;;
-	
 	stop)
-	kill `ps -ef | grep tran | grep -v grep  | awk '{print $2}'`
-	if [ echo $? = 0 ]; then 
+	killall transmission-daemon
+	if [  $? = 0 ]; then 
 	echo "Transmission Application Terminated"	
 	fi
 	;;
 	
 	*)
-	echo "Usage $0 <start stop status>"
+	echo "Usage: $0 <start stop status>"
 	;;
 
 esac
