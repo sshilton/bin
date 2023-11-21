@@ -1,4 +1,5 @@
 #!/bin/bash
+#! /etc/init.d/blockcn
 #set -x
 ### BEGIN INIT INFO
 # Provides:          blockcn
