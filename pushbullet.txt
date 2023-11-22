@@ -1,0 +1,13 @@
+{"devices":[{"id":5151119433859072,"iden":"ujzmiZqHC5QsjxKSvDib6a","extras":{"manufacturer":"samsung","model":"SM-S134DL","android_version":"","sdk_version":"","app_version":"256"}},{"id":6287260906749952,"iden":"ujzmiZqHC5QsjCXuUUIiv6","extras":{"manufacturer":"Google","model":"HP Chromebook x360 11 G1 EE","android_version":"","sdk_version":"","app_version":"256"}},{"id":4977675642142720,"iden":"ujzmiZqHC5QsjwXCVX9NV6","extras":{"manufacturer":"SKY Devices","model":"SKY PAD8Pro","android_version":"","sdk_version":"","app_version":"256"}}],"shared_devices":[]}# 'notify-host-by-push' command definition - <device> ident
+
+# 'notify-host-by-push' command definition - <device> ident
+define command{
+        command_name    notify-host-by-push
+        command_line    /usr/bin/curl https://api.pushbullet.com/api/pushes -u o.vbmmidsCSInNmrQYsqHQ5dXQakgf22yT: -d device_iden=ujzmiZqHC5QsjxKSvDib6a -d type=note -d title="** $NOTIFICATIONTYPE$ Host Alert: $HOSTNAME$ is $HOSTSTATE$ **" -d body="***** Nagios ***** Notification Type: $NOTIFICATIONTYPE$ Host: $HOSTNAME$ State: $HOSTSTATE$ Address: $HOSTADDRESS$ Info: $HOSTOUTPUT$ Date/Time: $LONGDATETIME$" -X POST
+        }
+
+# 'notify-service-by-push' command definition - <device> ident
+define command{
+       command_name    notify-service-by-push
+       command_line    /usr/bin/curl https://api.pushbullet.com/api/pushes -u o.vbmmidsCSInNmrQYsqHQ5dXQakgf22yT: -d device_iden=ujzmiZqHC5QsjxKSvDib6a -d type=note -d title="***** Nagios ***** Notification Type: $NOTIFICATIONTYPE$ Service: $SERVICEDESC$ Host: $HOSTALIAS$ Address: $HOSTADDRESS$ State: $SERVICESTATE$ Date/Time: $LONGDATETIME$ Additional Info: $SERVICEOUTPUT$ " -d body="** $NOTIFICATIONTYPE$ Service Alert: $HOSTALIAS$/$SERVICEDESC$ is $SERVICESTATE$ **" -X POST
+       }
