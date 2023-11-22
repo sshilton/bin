@@ -3,11 +3,11 @@
 # 'notify-host-by-push' command definition - <device> ident
 define command{
         command_name    notify-host-by-push
-        command_line    /usr/bin/curl https://api.pushbullet.com/api/pushes -u <YourAPIkey>: -d device_iden=<DesiredIdent> -d type=note -d title="** $NOTIFICATIONTYPE$ Host Alert: $HOSTNAME$ is $HOSTSTATE$ **" -d body="***** Nagios ***** Notification Type: $NOTIFICATIONTYPE$ Host: $HOSTNAME$ State: $HOSTSTATE$ Address: $HOSTADDRESS$ Info: $HOSTOUTPUT$ Date/Time: $LONGDATETIME$" -X POST
+        command_line    /usr/bin/curl https://api.pushbullet.com/api/pushes -u o.vbmmidsCSInNmrQYsqHQ5dXQakgf22yT: -d device_iden=ujzmiZqHC5QsjxKSvDib6a -d type=note -d title="** $NOTIFICATIONTYPE$ Host Alert: $HOSTNAME$ is $HOSTSTATE$ **" -d body="***** Nagios ***** Notification Type: $NOTIFICATIONTYPE$ Host: $HOSTNAME$ State: $HOSTSTATE$ Address: $HOSTADDRESS$ Info: $HOSTOUTPUT$ Date/Time: $LONGDATETIME$" -X POST
         }
 
 # 'notify-service-by-push' command definition - <device> ident
 define command{
        command_name    notify-service-by-push
-       command_line    /usr/bin/curl https://api.pushbullet.com/api/pushes -u <YourAPIkey>: -d device_iden=<DesiredIdent> -d type=note -d title="***** Nagios ***** Notification Type: $NOTIFICATIONTYPE$ Service: $SERVICEDESC$ Host: $HOSTALIAS$ Address: $HOSTADDRESS$ State: $SERVICESTATE$ Date/Time: $LONGDATETIME$ Additional Info: $SERVICEOUTPUT$ " -d body="** $NOTIFICATIONTYPE$ Service Alert: $HOSTALIAS$/$SERVICEDESC$ is $SERVICESTATE$ **" -X POST
+       command_line    /usr/bin/curl https://api.pushbullet.com/api/pushes -u o.vbmmidsCSInNmrQYsqHQ5dXQakgf22yT: -d device_iden=ujzmiZqHC5QsjxKSvDib6a -d type=note -d title="***** Nagios ***** Notification Type: $NOTIFICATIONTYPE$ Service: $SERVICEDESC$ Host: $HOSTALIAS$ Address: $HOSTADDRESS$ State: $SERVICESTATE$ Date/Time: $LONGDATETIME$ Additional Info: $SERVICEOUTPUT$ " -d body="** $NOTIFICATIONTYPE$ Service Alert: $HOSTALIAS$/$SERVICEDESC$ is $SERVICESTATE$ **" -X POST
        }
