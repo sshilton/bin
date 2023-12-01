@@ -1,6 +1,6 @@
 #! /bin/sh
 #sean.shilton@fepoc.com 
-# set -x
+ set -x
 # modified march 20th 2020 for FEPOC file tree
  if [ -x /usr/local/nagios/bin/nagios ] && [ -r /usr/local/nagios/etc/nagios.cfg ]; then
 # checking permissions on check_icmp

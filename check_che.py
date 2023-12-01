@@ -5,7 +5,7 @@ CheState = sys.argv[1]
 #print (CheState)
 match CheState:
     case "Activated":
-        print ("Chibi Che is Activate - poke boto now!!")
+        print ("Chibi Che is Activated - poke boto now!!")
         exit (0)
     case "NotActivated":
         print ("Che is not activated :(")
