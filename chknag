@@ -4,7 +4,7 @@
 
 # modified march 20th 2020 for FEPOC file tree
 nagios=`which nagios`
-nagios_cfg=`locate nagios.cfg | grep etc`
+nagios_cfg=`locate nagios.cfg | grep nagios/etc/nagios.cfg$`
 if [ -x "$nagios" ] && [ -r "$nagios_cfg" ]; then
 # checking permissions on check_icmp
 	sudo chown root:root /usr/local/nagios/libexec/check_icmp
