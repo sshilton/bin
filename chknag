@@ -1,12 +1,15 @@
 #! /bin/sh
-#sean.shilton@fepoc.com 
- set -x
+#monitoringsme@outlook.com 
+#set -x
+
 # modified march 20th 2020 for FEPOC file tree
- if [ -x /usr/local/nagios/bin/nagios ] && [ -r /usr/local/nagios/etc/nagios.cfg ]; then
+nagios=`which nagios`
+nagios_cfg=`locate nagios.cfg | grep etc`
+if [ -x "$nagios" ] && [ -r "$nagios_cfg" ]; then
 # checking permissions on check_icmp
 	sudo chown root:root /usr/local/nagios/libexec/check_icmp
 	sudo chmod 4755 /usr/local/nagios/libexec/check_icmp
-	 sudo 	/usr/local/nagios/bin/nagios -v /usr/local/nagios/etc/nagios.cfg
+	 sudo 	$nagios -v $nagios_cfg
 	else
 	echo "You do not have execute permisions on nagios or readable access to the nagios.cfg, you need to run with sudo or be root, you are `id -un`"
 fi
