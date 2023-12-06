@@ -5,10 +5,12 @@ CheState = sys.argv[1]
 #print (CheState)
 match CheState:
     case "Activated":
-        print ("Chibi Che is Activated - poke boto now!!")
+        print ("OK: Chibi Che is Activated - poke boto now!!")
         exit (0)
     case "NotActivated":
-        print ("Che is not activated :(")
+        print ("WARNING: Che is not activated :(")
         exit (1)
     case _:
-        print ("I do not know what state Che is in, it is reported she is " + CheState)
+        print ("UNKNOWN: I do not know what state Che is in, it is reported she is " + CheState)
+        exit (3)
+
